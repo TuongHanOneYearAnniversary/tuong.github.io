@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>happy anniversary 1 years</title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+            background: black;
+            background-image: url('Video/black.jpg');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+            transform-style: preserve-3d;
+            backface-visibility: hidden;
+            will-change: transform;
+        }
+
+        #startBtn {
+            position: fixed;
+            top: 66vh;
+            left: 50%;
+            z-index: 30;
+            transform: translateX(-50%);
+            background: #ffb700;
+            border: none;
+            padding: 1.2em 3em;
+            font-size: 1.8rem;
+            border-radius: 16px;
+            cursor: pointer;
+            box-shadow: 0 0 10px #ffb700, 0 0 30px #ffb700;
+            transition: background-color 0.3s ease;
+            user-select: none;
+            font-weight: 700;
+        }
+
+        #startBtn:hover {
+            background-color: #ffaa00;
+            box-shadow: 0 0 15px #ffaa00, 0 0 40px #ffaa00;
+        }
+
+        #introText {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 1300px;
+            width: 90%;
+            text-align: center;
+            font-size: 3rem;
+            font-weight: 700;
+            pointer-events: none;
+            z-index: 20;
+            user-select: none;
+            color: white;
+            text-shadow:
+                0 0 10px #ff7f00,
+                0 0 20px #ff7f00;
+            white-space: pre-line;
+            opacity: 0;
+            transition: opacity 1s ease;
+            line-height: 1.3em;
+            will-change: opacity;
+        }
+
+        .scene-3d {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            transform-style: preserve-3d;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            z-index: 10;
+            will-change: transform, opacity;
+        }
+
+        .scene-3d.active {
+            pointer-events: auto;
+            opacity: 1;
+        }
+
+        .falling-text-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            transform-style: preserve-3d;
+        }
+
+        .falling-text {
+            position: absolute;
+            pointer-events: none;
+            animation-name: fall3d;
+            animation-timing-function: linear;
+            animation-iteration-count: 1;
+            opacity: 0;
+            transform-style: preserve-3d;
+            will-change: transform, opacity;
+        }
+
+        .falling-text.text {
+            color: #fff;
+            white-space: nowrap;
+            text-shadow:
+                0 0 5px #fff,
+                0 0 10px #fff,
+                0 0 15px #ff7f00,
+                0 0 20px #ff7f00,
+                0 0 25px #ff7f00,
+                0 0 30px #ff7f00,
+                0 0 35px #ff7f00;
+        }
+
+        .falling-text.image img {
+            display: block;
+            width: 100%;
+            height: auto;
+            pointer-events: none;
+            filter: drop-shadow(0 0 5px #ff7f00);
+            will-change: transform, opacity;
+        }
+
+        @keyframes fall3d {
+            0% {
+                transform: translateY(-100px) translateX(0px) translateZ(var(--z-depth, 0px)) rotateX(0deg) rotateY(var(--rotY, 0deg));
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(100vh) translateX(var(--drift, 0px)) translateZ(var(--z-depth, 0px)) rotateX(0deg) rotateY(calc(var(--rotY, 0deg) + 360deg));
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <button id="startBtn">Bắt đầu</button>
+
+    <div id="introText"></div>
+
+    <div class="scene-3d" id="scene3d">
+        <div class="falling-text-container" id="fallingTextContainer"></div>
+    </div>
+
+    <script>
+        const startBtn = document.getElementById('startBtn');
+        const introText = document.getElementById('introText');
+        const scene3d = document.getElementById('scene3d');
+        const container = document.getElementById('fallingTextContainer');
+
+        const introTexts = [
+            "365 ngày Yêu em\n anh không chỉ yêu mà còn trưởng thành.",
+            "Em không chỉ là người yêu\n mà là sức mạnh lớn nhất của anh.",
+            "Anh cảm ơn em đã chọn anh giữa bao người.",
+            "Tương lai anh muốn cùng em bước\n bước trên hành trình chúng ta.",
+            "Anh yêu em \n hơn cả mọi lời nói hay cảm xúc có thể diễn tả.",
+            "Happy anniversary 1 years \" Ghệ đít bự \""
+        ];
+
+        const textItems = [
+            "Cảm ơn vì em đã đến bên anh 😍",
+            "Anh sẽ luôn bên cạnh em ❤️",
+            "Anh yêu em 🥰",
+            "❤️",
+            "💕 ",
+            "💖 ",
+            "❣️",
+            "💝",
+            "💗"
+        ];
+
+        const imageItems = [
+            "Image/image1.JPG", "Image/image2.JPG", "Image/image3.JPG",
+            "Image/image4.JPG", "Image/image5.JPG", "Image/image6.JPG",
+            "Image/image7.JPG", "Image/image8.JPG", "Image/image9.JPG",
+            "Image/image10.JPG", "Image/image11.JPG", "Image/image12.JPG",
+            "Image/image13.JPG", "Image/image14.JPG", "Image/image15.JPG",
+            "Image/image16.JPG", "Image/image17.JPG", "Image/image18.JPG",
+            "Image/image19.JPG", "Image/image20.JPG", "Image/image21.JPG",
+            "Image/image22.JPG", "Image/image23.JPG"
+        ];
+
+
+        const minFontSize = 16;
+        const maxFontSize = 32;
+        const minDuration = 8;
+        const maxDuration = 15;
+        const spawnInterval = 900; // Tăng chút để giảm tần suất rơi
+
+        let mouseX = 0;
+        let mouseY = 0;
+        let targetRotateX = 0;
+        let targetRotateY = 0;
+        let currentRotateX = 0;
+        let currentRotateY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+            mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+            targetRotateY = mouseX * 30;
+            targetRotateX = -mouseY * 20;
+        });
+
+        function animate3D() {
+            currentRotateX += (targetRotateX - currentRotateX) * 0.1;
+            currentRotateY += (targetRotateY - currentRotateY) * 0.1;
+            scene3d.style.transform = `rotateX(${currentRotateX}deg) rotateY(${currentRotateY}deg)`;
+            requestAnimationFrame(animate3D);
+        }
+
+        async function showIntroTexts(texts, interval = 5500) {
+            introText.style.opacity = '0';
+            for (let i = 0; i < texts.length; i++) {
+                introText.textContent = texts[i];
+                introText.style.transition = 'opacity 1s ease';
+                introText.style.opacity = '1';
+                await new Promise(r => setTimeout(r, interval - 2000));
+                introText.style.opacity = '0';
+                await new Promise(r => setTimeout(r, 2000));
+            }
+        }
+
+        function createFallingText(item, isImage) {
+            if (!container) return;
+
+            // Giới hạn tối đa phần tử trên màn hình để tránh lag
+            if (container.children.length > 50) return;
+
+            const textElement = document.createElement('div');
+            textElement.classList.add('falling-text');
+
+            textElement.style.left = `${Math.random() * 90}%`;
+
+            const fontSize = Math.random() * (maxFontSize - minFontSize) + minFontSize;
+
+            if (isImage) {
+                textElement.classList.add('image');
+                const img = document.createElement('img');
+                img.src = item;
+                img.style.width = `${fontSize * 3 * 1.5}px`;
+                img.style.height = "auto";
+                img.style.display = "block";
+                img.style.pointerEvents = "none";
+                textElement.appendChild(img);
+            } else {
+                textElement.classList.add('text');
+                textElement.textContent = item;
+                textElement.style.fontSize = `${fontSize}px`;
+            }
+
+            const duration = Math.random() * (maxDuration - minDuration) + minDuration;
+            textElement.style.animationDuration = `${duration}s`;
+            textElement.style.animationDelay = `0s`;
+
+            const zDepth = Math.random() * 600 - 300;
+            const drift = (Math.random() - 0.5) * 150;
+            const rotX = isImage ? 0 : Math.random() * 360;
+            const rotY = Math.random() * 360;
+
+            textElement.style.setProperty('--z-depth', `${zDepth}px`);
+            textElement.style.setProperty('--drift', `${drift}px`);
+            textElement.style.setProperty('--rotX', `${rotX}deg`);
+            textElement.style.setProperty('--rotY', `${rotY}deg`);
+
+            const depthOpacity = 1 - Math.abs(zDepth) / 600;
+            textElement.style.filter = `opacity(${0.5 + depthOpacity * 0.5})`;
+
+            container.appendChild(textElement);
+
+            setTimeout(() => {
+                if (textElement.parentElement === container) {
+                    container.removeChild(textElement);
+                }
+            }, (duration + 0.5) * 1000);
+        }
+
+        function getRandomItem() {
+            const totalLength = textItems.length + imageItems.length;
+            const randomIndex = Math.floor(Math.random() * totalLength);
+            if (randomIndex < imageItems.length) {
+                return { item: imageItems[randomIndex], isImage: true };
+            } else {
+                const textIndex = randomIndex - imageItems.length;
+                return { item: textItems[textIndex], isImage: false };
+            }
+        }
+
+        let fallingInterval;
+
+        function startRandomFalling() {
+            createRandomFalling();
+            fallingInterval = setInterval(createRandomFalling, spawnInterval);
+        }
+
+        function stopRandomFalling() {
+            clearInterval(fallingInterval);
+        }
+
+        function createRandomFalling() {
+            const { item, isImage } = getRandomItem();
+            createFallingText(item, isImage);
+        }
+
+        startBtn.addEventListener('click', async () => {
+            startBtn.style.display = 'none';
+            scene3d.classList.add('active');
+            animate3D();
+            startRandomFalling();
+            await showIntroTexts(introTexts);
+            // Có thể dừng rơi nếu muốn, hoặc giữ nguyên:
+            // stopRandomFalling();
+        });
+    </script>
+<script>
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const p = document.createElement('p');
+        p.textContent = "Vì tinh tú J97";
+        p.style.position = 'fixed';
+        p.style.bottom = '10px';
+        p.style.right = '10px';
+        p.style.fontSize = '11px';
+        p.style.color = 'white';
+        p.style.margin = '0';
+        p.style.zIndex = '1000';
+        p.style.userSelect = 'none';
+        document.body.appendChild(p);
+      }, 9000);
+    });
+  </script>
+  
+      
+
+</body>
+
+</html>
